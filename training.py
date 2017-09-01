@@ -35,7 +35,7 @@ def training(input_var, target_var, encoder, decoder, encoder_optimizer, decoder
     
     #Training decoder, use teacher enforce
     is_teacher_forcing = random.random() < teacher_force_ratio
-    if is_teacher_enforce:
+    if is_teacher_forcing:
         for i in range(target_len):
             decoder_output, decoder_context, decoder_hidden, decoder_atten = decoder(decoder_input,
                                                                                     decoder_hidden,
