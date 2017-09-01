@@ -19,7 +19,7 @@ class EncoderRNN(nn.Module):
 
     def forward(self, word_inputs, hidden):
         seq_len = len(word_inputs)
-        embeded = self.embedding(words_input).view(seq_len, 1, -1)
+        embeded = self.embedding(word_inputs).view(seq_len, 1, -1)
         output, hidden = self.gru(embeded, hidden)
         return output, hidden
 

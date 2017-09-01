@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import torch
+from torch.autograd import Variable
+
 teacher_force_ratio = 0.5
 clip = 5
 
@@ -61,4 +64,15 @@ def training(input_var, target_var, encoder, decoder, encoder_optimizer, decoder
     decoder_optimizer.step()
     
     return loss.data[0] / target_len
-    
+
+def as_minutes(s):
+    m = math.floor(s / 60)
+    s -= m * 60
+    return '%dm %ds' % (m, s)
+
+def time_since(since, percent):
+    now = time.time()
+    s = now - since
+    es = s / (percent)
+    rs = es - s
+    return '%s (- %s)' % (as_minutes(s), as_minutes(rs))
