@@ -3,6 +3,7 @@
 
 import torch
 from torch.autograd import Variable
+import random
 
 SOS_token = 0
 EOS_token = 1
