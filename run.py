@@ -6,7 +6,9 @@ import torch
 from torch import optim
 import torch.nn as nn
 
-from models, preprocess, training import *
+from models import *
+from preprocess import *
+from training import *
 
 attn_mode = "general"
 hidden_size = 500
