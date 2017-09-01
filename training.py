@@ -26,7 +26,7 @@ def training(input_var, target_var, encoder, decoder, encoder_optimizer, decoder
     encoder_outputs, encoder_hidden = encoder(input_var, encoder_hidden)
     
     #Then go to decoder, prepare input, context, hidden first
-    decoder_input = Variable(torch.LongTensor([[SOS_token]]))
+    decoder_input = Variable(torch.LongTensor([[0]]))
     decoder_input = decoder_input.cuda()
     decoder_hidden = encoder_hidden
     decoder_context = Variable(torch.zeros(1, decoder.hidden_size))
