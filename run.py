@@ -47,7 +47,7 @@ start = time.time()
 
 for epoch in range(1, n_epochs+1):
     # Get data
-    training_pair = variable_pair(random.choice(pairs))
+    training_pair = variables_from_pair(random.choice(pairs))
     input_var = training_pair[0]
     output_var = training_pair[1]
 
