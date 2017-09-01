@@ -12,7 +12,7 @@ EOS_token = 1
 
 # Max length, and good prefixs to filter pairs
 MAX_LENGTH = 20
-good_prefixes = {'i', 'you', 'he', 'she', 'we', 'they'}
+good_prefixes = ('i', 'you', 'he', 'she', 'we', 'they')
 
 class Lang:
     """Language class. 
