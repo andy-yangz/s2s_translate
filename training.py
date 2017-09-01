@@ -4,6 +4,8 @@
 import torch
 from torch.autograd import Variable
 
+SOS_token = 0
+EOS_token = 1
 teacher_force_ratio = 0.5
 clip = 5
 
