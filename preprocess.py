@@ -94,7 +94,7 @@ def variable_from_sentence(lang, sentence):
     var = var.cuda()
     return var
 
-def variables_from_pair(pair):
+def variables_from_pair(pair, input_lang, output_lang):
     input_variable = variable_from_sentence(input_lang, pair[0])
     target_variable = variable_from_sentence(output_lang, pair[1])
     return (input_variable, target_variable)
