@@ -10,6 +10,11 @@ from models import *
 from preprocess import *
 from training import *
 
+#Read Data
+path = '/home/andy/data/lang_pairs/'
+input_lang, output_lang, pairs = prepare_data(path, 'eng', 'deu')
+
+#Set parameter
 attn_mode = "general"
 hidden_size = 500
 n_layers = 2
