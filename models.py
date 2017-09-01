@@ -104,7 +104,7 @@ if __name__ == '__main__':
     print(encoder_test)
     print(decoder_test)
 
-    encoder_hidden = encoder_test.ini_hidden()
+    encoder_hidden = encoder_test.init_hidden()
     word_input = Variable(torch.LongTensor([1, 2, 3])).cuda()
     encoder_outputs, encoder_hidden = encoder_test(word_input, encoder_hidden)
 
