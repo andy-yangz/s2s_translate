@@ -24,7 +24,7 @@ dropout = 0.05
 encoder = EncoderRNN(input_lang.nwords, hidden_size, n_layers)
 encoder = encoder.cuda()
 decoder = AttnDecoderRNN(attn_mode, hidden_size, output_lang.nwords, n_layers, dropout=dropout)
-decoder = decode.cuda()
+decoder = decoder.cuda()
 
 #optimizor and learning_rate
 learning_rate = 1e-4
