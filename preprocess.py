@@ -71,7 +71,7 @@ def filter_pairs(pairs):
     return[pair for pair in pairs if filter(pair)]
 
 def prepare_data(path, lang1_n, lang2_n):
-    input_lang, output_lang, pairs = read_langs(path, lang1_name, lang2_name)
+    input_lang, output_lang, pairs = read_langs(path, lang1_n, lang2_n)
     print("Read %d sentence pairs" % len(pairs))
 
     pairs = filter_pairs(pairs)
