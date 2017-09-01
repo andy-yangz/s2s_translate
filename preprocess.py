@@ -6,6 +6,8 @@ import unicodedata
 import re
 import os
 
+from torch.autograd import Variable
+
 # Special token
 SOS_token = 0
 EOS_token = 1
@@ -47,22 +49,28 @@ def unicode2ascii(s):
         if unicodedata.category(c) != 'Mn'
     )
 
+
 def normalize_string(s):
     s = unicode2ascii(s.lower().strip())
     s = re.sub(r'([.!?])', r' \1', s)
     s = re.sub(r'[^a-zA-Z0-9.!?\t]', r' ', s)
     return s
 
+
 def read_langs(path, lang1_n, lang2_n):
     lang1 = Lang(lang1_n)
     lang2 = Lang(lang2_n)
     data = open(os.path.join(path,'%s-%s.txt'%(lang1_n, lang2_n)))
     pairs = []
-    
+    count = 0
     for line in data:
         pair = normalize_string(line).strip().split('\t')
         pairs.append(pair)
+        if count > 50:
+            break
+        count += 1
     return lang1, lang2, pairs
+
 
 def filter(p):
     return(len(p[0]) < MAX_LENGTH and p[0].startswith(good_prefixes))
