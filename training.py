@@ -74,7 +74,7 @@ def as_minutes(s):
     s -= m * 60
     return '%dm %ds' % (m, s)
 
-def time_since(since, percent):
+def since_time(since, percent):
     now = time.time()
     s = now - since
     es = s / (percent)
