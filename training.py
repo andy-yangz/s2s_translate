@@ -71,8 +71,8 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
     return loss.data[0] / target_length
 
 def as_minutes(s):
-    m = math.floor(s / 60)
-    s -= m * 60
+    m = s // 60
+    s = s % 60
     return '%dm %ds' % (m, s)
 
 def since_time(since, percent):
