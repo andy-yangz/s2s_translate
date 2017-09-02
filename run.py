@@ -78,5 +78,5 @@ save_checkpoint({
     'decoder': decoder.state_dict(),
     'encoder_optimizer': encoder_optimizer.state_dict(),
     'decoder_optimizer': decoder_optimizer.state_dict(),
-    'epoch' = epoch + 1
+    'epoch' : epoch + 1
 })
