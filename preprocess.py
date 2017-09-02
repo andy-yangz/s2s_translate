@@ -62,13 +62,11 @@ def read_langs(path, lang1_n, lang2_n):
     lang2 = Lang(lang2_n)
     data = open(os.path.join(path,'%s-%s.txt'%(lang1_n, lang2_n)))
     pairs = []
-    count = 0
+
     for line in data:
         pair = normalize_string(line).strip().split('\t')
         pairs.append(pair)
-        if count > 50:
-            break
-        count += 1
+        
     return lang1, lang2, pairs
 
 
