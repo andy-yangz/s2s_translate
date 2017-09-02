@@ -22,7 +22,7 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
     target_length = target_variable.size()[0]
 
     # Run words through encoder
-    encoder_hidden = encoder.ini_hidden()
+    encoder_hidden = encoder.init_hidden()
     encoder_outputs, encoder_hidden = encoder(input_variable, encoder_hidden)
     
     # Prepare input and output variables
