@@ -10,7 +10,7 @@ EOS_token = 1
 teacher_force_ratio = 0.5
 clip = 5
 
-def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion, max_length=MAX_LENGTH):
+def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion):
 
     # Zero gradients of both optimizers
     encoder_optimizer.zero_grad()
