@@ -10,6 +10,7 @@ import torch.nn as nn
 from models import *
 from preprocess import *
 from training import *
+from util import *
 
 #Read Data
 path = '/home/andy/data/lang_pairs/'
@@ -69,4 +70,10 @@ for epoch in range(1, n_epochs+1):
         print_loss_ave = print_loss_total / print_every
         print("%s (%d %d%%) %.4f" % (since_time(start, epoch/n_epochs), epoch, epoch/n_epochs, print_loss_ave))
         print_loss_total = 0
-        
+
+
+save_checkpoint({
+    'plot_losses': plot_losses,
+    'encoder_state_dict': encoder.state_dict(),
+    'decoder_state_dict': decoder.state_dict()
+})
