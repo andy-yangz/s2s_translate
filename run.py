@@ -53,7 +53,7 @@ for epoch in range(1, n_epochs+1):
     output_var = training_pair[1]
 
     #Running traning
-    loss = training(input_var, output_var, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)
+    loss = train(input_var, output_var, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion)
 #     print(loss)
     #keep track of loss
     plot_loss_total += loss
