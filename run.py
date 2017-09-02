@@ -35,7 +35,7 @@ decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate)
 criterion = nn.NLLLoss()
 
 # plotting and data
-n_epochs = 50000
+n_epochs = 1
 plot_every = 300
 print_every = 1000
 
