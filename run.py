@@ -35,7 +35,7 @@ decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate)
 criterion = nn.NLLLoss()
 
 # plotting and data
-n_epochs = 1
+n_epochs = 50000
 plot_every = 300
 print_every = 1000
 
@@ -74,6 +74,9 @@ for epoch in range(1, n_epochs+1):
 
 save_checkpoint({
     'plot_losses': plot_losses,
-    'encoder_state_dict': encoder.state_dict(),
-    'decoder_state_dict': decoder.state_dict()
+    'encoder': encoder.state_dict(),
+    'decoder': decoder.state_dict(),
+    'encoder_optimizer': encoder_optimizer.state_dict(),
+    'decoder_optimizer': decoder_optimizer.state_dict(),
+    'epoch' = epoch + 1
 })
