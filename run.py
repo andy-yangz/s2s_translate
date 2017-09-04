@@ -12,9 +12,27 @@ from preprocess import *
 from training import *
 from util import *
 
+#Add argparse part
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-e', '--evaluate', help="Evaluate our model",
+                    action="store_true" )
+args = parser.parse_args()
+
+
 #Read Data
-path = '/home/andy/data/lang_pairs/'
-input_lang, output_lang, pairs = prepare_data(path, 'eng', 'deu')
+if args.evaluate:
+    print("Evaluation Mode.")
+    check_point = torch.load('checkpoint.pth.tar')
+
+    #Load language information
+    input_lang = check_point['input_lang']
+    output_lang = check_point['output_lang']
+    pairs = check_point['pairs']
+else:    
+    path = '/home/andy/data/lang_pairs/'
+    input_lang, output_lang, pairs = prepare_data(path, 'eng', 'deu')
 
 #Set parameter
 attn_mode = "general"
@@ -27,6 +45,12 @@ encoder = EncoderRNN(input_lang.nwords, hidden_size, n_layers)
 encoder = encoder.cuda()
 decoder = AttnDecoderRNN(attn_mode, hidden_size, output_lang.nwords, n_layers, dropout_p=dropout)
 decoder = decoder.cuda()
+
+if args.evaluate:
+    encoder.load_state_dict(check_point['encoder'])
+    decoder.load_state_dict(check_point['decoder'])
+
+    evaluate_randomly(pairs, input_lang, output_lang, encoder, decoder)
 
 #optimizor and learning_rate
 learning_rate = 1e-4
