@@ -56,7 +56,7 @@ else: # embed_size euqal hidden size, without pretrained
     embed_size = hidden_size
 
 #initial model
-encoder = EncoderRNN(input_lang.nwords, embed_size, hidden_size, n_layers)
+encoder = EncoderRNN(input_lang.nwords, embed_size, hidden_size, n_layers, bidirectional=True)
 if args.w2v_path:
     encoder.load_pretrained_embed(pretrained_weights)
 encoder = encoder.cuda()
