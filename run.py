@@ -18,6 +18,11 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--evaluate', help="Evaluate our model",
                     action="store_true" )
+parser.add_argument('-w', '--w2v_path', help='Load pretrained word2vec')
+parser.add_argument('-t', '--test', help='Use sampel of data to test model',
+                    action='store_true')
+parser.add_argument('-s', '--save', help='Path to save trained model, and data.',
+                    default='checkpoint.pth.tar')
 args = parser.parse_args()
 
 
@@ -32,7 +37,10 @@ if args.evaluate:
     pairs = check_point['pairs']
 else:    
     path = '/home/andy/data/lang_pairs/'
-    input_lang, output_lang, pairs = prepare_data(path, 'eng', 'deu')
+    if args.test:
+        input_lang, output_lang, pairs = prepare_data(path, 'eng', 'deu_test')
+    else:
+        input_lang, output_lang, pairs = prepare_data(path, 'eng', 'deu')
 
 #Set parameter
 attn_mode = "general"
@@ -40,8 +48,17 @@ hidden_size = 500
 n_layers = 2
 dropout = 0.05
 
+#Load pretrained embed matrix
+if args.w2v_path: # Use pretrained w2v
+    embed_mat, embed_size = get_embedding_data(args.w2v_path, input_lang)
+else: # embed_size euqal hidden size, without pretrained
+    embed_mat = None
+    embed_size = hidden_size
+
 #initial model
-encoder = EncoderRNN(input_lang.nwords, hidden_size, n_layers)
+encoder = EncoderRNN(input_lang.nwords, embed_size, hidden_size, n_layers)
+if args.w2v_path:
+    encoder.load_pretrained_embed(pretrained_weights)
 encoder = encoder.cuda()
 decoder = AttnDecoderRNN(attn_mode, hidden_size, output_lang.nwords, n_layers, dropout_p=dropout)
 decoder = decoder.cuda()
@@ -59,9 +76,14 @@ decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate)
 criterion = nn.NLLLoss()
 
 # plotting and data
-n_epochs = 50000
-plot_every = 300
-print_every = 1000
+if args.test:
+    n_epochs = 50
+    plot_every = 2
+    print_every = 10
+else:
+    n_epochs = 50000
+    plot_every = 300
+    print_every = 1000
 
 #history storage
 plot_losses = []
@@ -96,11 +118,15 @@ for epoch in range(1, n_epochs+1):
         print_loss_total = 0
 
 
+# Save trained data
 save_checkpoint({
     'plot_losses': plot_losses,
     'encoder': encoder.state_dict(),
     'decoder': decoder.state_dict(),
     'encoder_optimizer': encoder_optimizer.state_dict(),
     'decoder_optimizer': decoder_optimizer.state_dict(),
-    'epoch' : epoch + 1
-})
+    'epoch': epoch + 1,
+    'input_lang': input_lang,
+    'output_lang': output_lang,
+    'pairs': pairs
+}, filename=args.save)

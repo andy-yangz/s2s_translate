@@ -5,6 +5,7 @@ import torch
 import unicodedata
 import re
 import os
+import numpy as np
 
 from torch.autograd import Variable
 
@@ -104,3 +105,23 @@ def variables_from_pair(pair, input_lang, output_lang):
     input_variable = variable_from_sentence(input_lang, pair[0])
     target_variable = variable_from_sentence(output_lang, pair[1])
     return (input_variable, target_variable)
+
+def load_embedding(path):
+    embed_data = open(path)
+    embedding_dict = {}
+    for line in embed_data:
+        line_data = line.strip().split()
+        word, word_embed = line_data[0], line_data[1:]
+        embedding_dict[word] = word_embed
+    return embedding_dict    
+
+def get_embedding_data(path, lang):
+    print("Loading Pretrained Embedding...")
+    embed_dict = load_embedding(path)
+    embed_mat = []
+    for i in range(lang.nwords-1):
+        vector = embed_dict.get(lang.ind2word[i], np.random.rand(50).tolist())
+        embed_mat.append(vector)
+    embed_mat = np.asarray(embed_mat)
+    embed_size = embed_mat.shape[1]
+    return embed_mat, embed_size
