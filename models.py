@@ -8,14 +8,15 @@ import torch.nn.functional as F
 
 
 class EncoderRNN(nn.Module):
-    def __init__(self, input_size, embed_size, hidden_size, n_layers=1):
+    def __init__(self, input_size, embed_size, hidden_size, n_layers=1, bidirectional=True):
         super().__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.n_layers = n_layers
-        
+        self.bidirectional = bidirectional
+
         self.embedding = nn.Embedding(input_size, embed_size)
-        self.gru = nn.GRU(embed_size, hidden_size, n_layers)
+        self.gru = nn.GRU(embed_size, hidden_size, n_layers, bidirectional=bidirectional)
 
     def forward(self, word_inputs, hidden):
         seq_len = len(word_inputs)
@@ -27,7 +28,7 @@ class EncoderRNN(nn.Module):
         self.embedding.weights.data.copy_(torch.from_numpy(pretrained))
 
     def init_hidden(self):
-        hidden = Variable(torch.zeros(self.n_layers, 1, self.hidden_size))
+        hidden = Variable(torch.zeros(self.n_layers*(1+int(self.bidirectional)), 1, self.hidden_size))
         hidden = hidden.cuda()
         return hidden
 
@@ -40,7 +41,7 @@ class Attn(nn.Module):
         self.hidden_size = hidden_size
         
         if method == 'general':
-            self.attn = nn.Linear(hidden_size, hidden_size)
+            self.attn = nn.Linear(hidden_size*2, hidden_size)
         elif method == 'concat':
             self.attn = nn.Linear(hidden_size*2, hidden_size)
             self.other = nn.Parameter(torch.FloatTensor(hidden_size))
@@ -78,8 +79,8 @@ class AttnDecoderRNN(nn.Module):
         
         # Define layers
         self.embedding = nn.Embedding(output_size, hidden_size)
-        self.gru = nn.GRU(hidden_size * 2, hidden_size, n_layers, dropout=dropout_p)
-        self.out = nn.Linear(hidden_size * 2, output_size)
+        self.gru = nn.GRU(hidden_size * 3, hidden_size, n_layers, dropout=dropout_p)
+        self.out = nn.Linear(hidden_size * 3, output_size)
         
         # Choose attention model
         if attn_model != 'none':

@@ -31,8 +31,10 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
     
     # Prepare input and output variables
     decoder_input = Variable(torch.LongTensor([[SOS_token]]))
-    decoder_context = Variable(torch.zeros(1, decoder.hidden_size))
-    decoder_hidden = encoder_hidden # Use last hidden state from encoder to start decoder
+    decoder_context = Variable(torch.zeros(1, encoder.hidden_size*2))
+    hidden = Variable(torch.zeros(encoder.n_layers, 1, encoder.hidden_size)).cuda()
+    hidden.data.copy_(encoder_hidden.data[::2, :, :])
+    decoder_hidden = hidden # Use last hidden state from encoder to start decoder
     decoder_input = decoder_input.cuda()
     decoder_context = decoder_context.cuda()
 
